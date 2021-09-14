@@ -71,6 +71,7 @@
               "browserTarget": "angularfe:build:production"
             },
             "development": {
+              "proxyConfig": "projects/angularfe/proxy.conf.json",
               "browserTarget": "angularfe:build:development"
             }
           },
