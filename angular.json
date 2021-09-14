@@ -3,5 +3,104 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "angularfe": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/angularfe",
+      "sourceRoot": "projects/angularfe/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/angularfe",
+            "index": "projects/angularfe/src/index.html",
+            "main": "projects/angularfe/src/main.ts",
+            "polyfills": "projects/angularfe/src/polyfills.ts",
+            "tsConfig": "projects/angularfe/tsconfig.app.json",
+            "assets": [
+              "projects/angularfe/src/favicon.ico",
+              "projects/angularfe/src/assets"
+            ],
+            "styles": [
+              "projects/angularfe/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/angularfe/src/environments/environment.ts",
+                  "with": "projects/angularfe/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "angularfe:build:production"
+            },
+            "development": {
+              "browserTarget": "angularfe:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angularfe:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/angularfe/src/test.ts",
+            "polyfills": "projects/angularfe/src/polyfills.ts",
+            "tsConfig": "projects/angularfe/tsconfig.spec.json",
+            "karmaConfig": "projects/angularfe/karma.conf.js",
+            "assets": [
+              "projects/angularfe/src/favicon.ico",
+              "projects/angularfe/src/assets"
+            ],
+            "styles": [
+              "projects/angularfe/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "angularfe"
 }
