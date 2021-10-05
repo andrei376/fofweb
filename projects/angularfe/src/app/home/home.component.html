@@ -1,4 +1,18 @@
-<h3>JSON Web Test</h3>
 
-<button (click)="signIn()">Sign In</button>
-<button (click)="getPath()">Get Path 1</button>
+<div class="col-4">
+  <ul>
+    <li><span><b>Unread {{ unread ? '(' + unread + ')' : '' }}</b></span></li>
+
+    <li>Starred {{ starred ? '(' + starred + ')' : '' }}</li>
+  </ul>
+</div>
+<div class="col-8">
+  main
+</div>
+
+<div class="container">
+  <header class="jumbotron">
+    <p>{{ sidebar }}</p>
+    <p>{{ content }}</p>
+  </header>
+</div>
