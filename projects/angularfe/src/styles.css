@@ -1,2 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
+
+.feed-icon {
+  width: 16px;
+  height: 16px;
+  border: 0;
+}
+
+* {
+  cursor: default;
+}
+
+a, a * {
+  cursor: pointer;
+}

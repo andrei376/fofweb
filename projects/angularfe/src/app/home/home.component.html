@@ -1,18 +1,67 @@
 
-<div class="col-4">
-  <ul>
-    <li><span><b>Unread {{ unread ? '(' + unread + ')' : '' }}</b></span></li>
+<div class="row">
+  <div class="col-2">
+    <ul>
+      <li><span><b>Unread {{ unread ? '(' + unread + ')' : '' }}</b></span></li>
 
-    <li>Starred {{ starred ? '(' + starred + ')' : '' }}</li>
-  </ul>
-</div>
-<div class="col-8">
-  main
-</div>
+      <li>Starred {{ starred ? '(' + starred + ')' : '' }}</li>
+    </ul>
 
-<div class="container">
-  <header class="jumbotron">
-    <p>{{ sidebar }}</p>
-    <p>{{ content }}</p>
-  </header>
+    <div [innerHTML]="tagstbl"></div>
+
+    <div id="feeds">
+      <table>
+        <thead>
+          <tr class="heading">
+            <th *ngFor="let column of columns" class="{{ column_class[column] }}">
+              <span class="nowrap">
+                <a href="#" title="{{ title[column] }}" [innerHTML]="name[column] + (column == order ? (direction == 'asc' ? '&darr;' : '&uarr;') : '')">
+                </a>
+              </span>
+            </th>
+            <th class="controls"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of Object.keys(sidebar)" class="feed">
+            <td class="updated"><span title="{{ sidebar[row]['agestr'] }}" id="{{ sidebar[row]['feed_id'] }}-agestr">{{ sidebar[row]['agestrabbr'] }}</span></td>
+            <td class="latest"><span title="{{ sidebar[row]['lateststr'] }}" id="{{ sidebar[row]['feed_id'] }}-lateststr">{{ sidebar[row]['lateststrabbr'] }}</span></td>
+            <td style="unread" class="nowrap" id="{{ sidebar[row]['feed_id'] }}-items">
+              <ng-template [ngIf]="sidebar[row]['feed_unread'] > 0"><a class="unread" (click)="feed=sidebar[row]['feed_id'];what=null" title="new items">{{ sidebar[row]['feed_unread'] }}</a>/</ng-template>
+              <a (click)="feed=sidebar[row]['feed_id'];what='all';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
+            </td>
+            <td class="source">
+              <a href="{{ sidebar[row]['feed_url'] }}">
+                <ng-template let-image [ngIf]="((sidebar[row]['display_image'] == null || sidebar[row]['display_image'].length == 0) ? (sidebar[row]['feed_image'] == null || sidebar[row]['feed_image'].length == 0 ? fof_asset['feed_icon'] : sidebar[row]['feed_image']) : sidebar[row]['display_image'])">
+                <img class="feed-icon"
+                     src="https://feed.newsbox.ro/{{ image }}"
+                     title="{{ sidebar[row]['feed_cache_last_attempt_status'] == null || sidebar[row]['feed_cache_last_attempt_status'].length == 0 ? '' : 'Last update attempt was not successful.' }}"
+                     alt="{{ sidebar[row]['feed_cache_last_attempt_status'] }}"
+                />
+                </ng-template>
+              </a>
+            </td>
+            <td class="title">
+              <a href="{{ sidebar[row]['feed_link'] == '[no link]' ? sidebar[row]['feed_url'] : sidebar[row]['feed_link'] }}" title="home page" target="_blank">
+                <b>{{ sidebar[row]['display_title'].length == 0 ? sidebar[row]['feed_title'] : sidebar[row]['display_title'] }}</b>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-10">
+    <p>{{ content | json }}</p>
+
+    $items = fof_get_items(fof_current_user(), $feed, $what, $when, $which, $howmany, $order, $search);<br>
+    feed={{ feed }}<br>
+    what={{ what }}<br>
+    when={{ when }}<br>
+    which={{ which }}<br>
+    howmany={{ howmany }}<br>
+    order={{ order }}<br>
+    search={{ search }}<br>
+
+  </div>
 </div>

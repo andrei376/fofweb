@@ -4,6 +4,11 @@ const empty = require('locutus/php/var/empty');
 const implode = require('locutus/php/strings/implode');
 const usort = require('locutus/php/array/usort');
 const strtolower = require('locutus/php/strings/strtolower');
+const isset = require('locutus/php/var/isset');
+const htmlentities = require('locutus/php/strings/htmlentities');
+const json_encode = require('locutus/php/json/json_encode');
+const in_array = require('locutus/php/array/in_array');
+
 
 const Sequelize = require("sequelize");
 const { QueryTypes } = require('sequelize');
@@ -485,98 +490,159 @@ db.fof_db_get_tag_unread = async function($user_id) {
   return $counts;
 };
 
+db.fof_db_get_tags = async function($user_id) {
+  let $replacements = {};
+
+  let $query = "SELECT t.tag_id, t.tag_name, count( it.item_id ) AS count" +
+  " FROM fof_tag t" +
+  " LEFT JOIN fof_item_tag it ON t.tag_id = it.tag_id" +
+  " WHERE it.user_id = :user_id" +
+  " GROUP BY t.tag_id ORDER BY t.tag_name";
+
+  $replacements['user_id'] = $user_id;
+
+  let $result = await sequelize.query(
+    $query,
+    {
+      replacements: $replacements,
+      type: QueryTypes.SELECT
+    }
+  );
+
+  // console.log($result);
+
+  return $result;
+};
+
 db.fof_get_tags = async function($user_id) {
-  let $tags = {};
+  let $tags = [];
 
   let $counts = await db.fof_db_get_tag_unread($user_id);
 
-  console.log($counts);
+  // console.log($counts);
 
-  // let $statement = db.fof_db_get_tags($user_id);
+  let $statement = await db.fof_db_get_tags($user_id);
 
-  /*while ( ($row = fof_db_get_row($statement)) !== false )
-  {
-    if(isset($counts[$row['tag_id']]))
+  $statement.forEach($row => {
+    $row['unread'] = 0;
+    if (isset($counts[$row['tag_id']])) {
       $row['unread'] = $counts[$row['tag_id']];
-    else
-      $row['unread'] = 0;
+    }
 
-    $tags[] = $row;
-  }*/
+    $tags.push($row);
+  });
 
   return $tags;
 };
 
 db.fof_sidebar_tags_default = async function($user_id) {
-  $unread_id = await db.fof_db_get_tag_by_name('unread');
-  $star_id = await db.fof_db_get_tag_by_name('star');
-  $folded_id = await db.fof_db_get_tag_by_name('folded');
+  let $unread_id = await db.fof_db_get_tag_by_name('unread');
+  let $star_id = await db.fof_db_get_tag_by_name('star');
+  let $folded_id = await db.fof_db_get_tag_by_name('folded');
 
-  $tags = db.fof_get_tags($user_id);
+  let $tags = await db.fof_get_tags($user_id);
 
-  console.log($unread_id);
+  // console.log($unread_id);
+  // console.log($tags);
 
-  /*
+  let $taglines = [];
+  let $n = 0;
 
-  $taglines = array();
-  $n = 0;
-  foreach ($tags as $tag) {
-    $tag_id = $tag['tag_id'];
-    if ($tag_id == $unread_id
-      ||  $tag_id == $star_id
-      ||  $tag_id == $folded_id)
+  for (let $tag of $tags) {
+    console.log($tag);
+    let $tag_id = $tag['tag_id'];
+    if (
+      $tag_id == $unread_id
+      || $tag_id == $star_id
+      || $tag_id == $folded_id
+    ) {
       continue;
+    }
 
-    $tagline = '';
+    let $tagline = '';
 
-    $tag_name = $tag['tag_name'];
-    $tag_name_html = htmlentities($tag_name);
-    $tag_name_json = htmlentities(json_encode($tag_name), ENT_QUOTES);
+    let $tag_name = $tag['tag_name'];
+    let $tag_name_html = htmlentities($tag_name);
+    let $tag_name_json = htmlentities(json_encode($tag_name), 'ENT_QUOTES');
 
-    $count = $tag['count'];
-    $unread = $tag['unread'];
+    let $count = $tag['count'];
+    let $unread = $tag['unread'];
 
-    $tag_classes = array();
-    if (++$n % 2)
-      $tag_classes[] = 'odd-row';
-    if (in_array($tag_name, $what_a))
-      $tag_classes[] = 'current-view';
+    let $tag_classes = [];
+
+    if (++$n % 2) {
+      $tag_classes.push('odd-row');
+    }
+
     $tag_classes = implode(' ', $tag_classes);
-    if ( ! empty($tag_classes))
-      $tag_classes = ' class="' . $tag_classes . '"';
+    if (!empty($tag_classes)) {
+      $tag_classes = ' class="' + $tag_classes + '"';
+    }
 
-    $tagline .= '    <tr' . $tag_classes . '>';
+    $tagline += '    <tr' + $tag_classes + '>';
 
-    $tagline .= '<td class="unread">';
-    if ($unread)
-      $tagline .= '<a class="unread" href="' . fof_url('.', array('what' => "$tag_name unread", 'how' => 'paged')) . "\">$unread</a>/";
-    $tagline .= '<a href="' . fof_url('.', array('what' => $tag_name, 'how' => 'paged')) . "\">$count</a>";
-    $tagline .= '</td>';
+    $tagline += '<td class="unread">';
 
-    $tagline .= '<td class="title"><b><a href="' . fof_url('.', array('what' => $tag_name, 'how' => 'paged')). '">' . $tag_name_html . '</a></b></td>';
+    if ($unread) {
+      // $tagline += '<a class="unread" href="' . fof_url('.', array('what' => "$tag_name unread", 'how' => 'paged')) + "\">$unread</a>/";
+      $tagline += '<a class="unread" >' + $unread + '</a>/';
+    }
 
-    $tagline .= '<td class="controls"><a href="#" title="untag all items" onclick="return sb_del_tag_conf(' . $tag_name_json . ');">[x]</a></td>';
+    //$tagline .= '<a href="' . fof_url('.', array('what' => $tag_name, 'how' => 'paged')) . "\">$count</a>";
+    $tagline += '<a>' + $count + '</a>';
 
-    if ($sharing == 'all_tagged')
-      $tagline .= '<td class="sharing"><a href="' . fof_url('./shared.php', array('user' => $fof_user_id, 'which' => $tag_name, 'how' => 'paged')) . '">[' . $tag_name_html . ']</a>';
+    $tagline += '</td>';
 
-    $tagline .= '</tr>';
+    // $tagline .= '<td class="title"><b><a href="' . fof_url('.', array('what' => $tag_name, 'how' => 'paged')). '">' . $tag_name_html . '</a></b></td>';
+    $tagline += '<td class="title"><b><a>' + $tag_name_html + '</a></b></td>';
 
-    $taglines[] = $tagline;
+    //$tagline .= '<td class="controls"><a href="#" title="untag all items" onclick="return sb_del_tag_conf(' . $tag_name_json . ');">[x]</a></td>';
+    $tagline += '<td class="controls"><a title="untag all items">[x]</a></td>';
+
+    /*if ($sharing == 'all_tagged') {
+      //$tagline .= '<td class="sharing"><a href="' . fof_url('./shared.php', array('user' => $fof_user_id, 'which' => $tag_name, 'how' => 'paged')) . '">[' . $tag_name_html . ']</a>';
+      //skip
+    }*/
+
+    $tagline += '</tr>';
+
+    $taglines.push($tagline);
   }
 
-  if ( ! empty($taglines)) { ?>
-  <div id="tags">
-      <table cellspacing="0" cellpadding="1" border="0" id="taglist">
-      <tr class="heading"><td><span class="unread">#</span></td><td class="title">tag name</td><td class="controls">untag</td><?php if ($sharing == 'all_tagged') echo '<td class="sharing">shared page</td>'; ?></tr>
-    <?php
-    echo implode("\n", $taglines);
-      ?>
-  </table>
-  </div>
-    <!--tags end-->
-    <?php
+  let $content = "";
+
+  if (!empty($taglines)) {
+    $content += '<div id="tags">';
+
+    $content += '<table id="taglist">';
+
+    $content += '<thead>';
+
+    $content += '<tr class="heading">';
+    $content += '<td>';
+    $content += '<span class="unread">#</span>';
+    $content += '</td>';
+    $content += '<td class="title">';
+    $content += 'tag name';
+    $content += '</td>';
+    $content += '<td class="controls">';
+    $content += 'untag';
+    $content += '</td>';
+    $content += '</tr>';
+
+    $content += '</thead>';
+
+    $content += '<tbody>';
+
+    $content += implode("\n", $taglines);
+
+    $content += '</tbody>';
+
+    $content += '</table>';
+
+    $content += '</div>';
   }
-    ?>*/
+
+  return $content;
 };
 module.exports = db;
