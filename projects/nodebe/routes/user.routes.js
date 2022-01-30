@@ -19,7 +19,7 @@ module.exports = function(app) {
     controller.userBoard
   );
 
-  app.get(
+  app.post(
     '/api/feeds',
     [authJwt.verifyToken],
     controller.getFeeds
@@ -29,5 +29,41 @@ module.exports = function(app) {
     '/api/tagstbl',
     [authJwt.verifyToken],
     controller.getTagsTable
+  );
+
+  app.post(
+    '/api/feedname',
+    [authJwt.verifyToken],
+    controller.getFeedName
+  );
+
+  app.post(
+    '/api/items',
+    [authJwt.verifyToken],
+    controller.getItems
+  );
+
+  app.post(
+    '/api/itemcount',
+    [authJwt.verifyToken],
+    controller.getItemCount
+  );
+
+  app.post(
+    '/api/mark_read',
+    [authJwt.verifyToken],
+    controller.markRead
+  );
+
+  app.post(
+    '/api/del_tag',
+    [authJwt.verifyToken],
+    controller.delTag
+  );
+
+  app.post(
+    '/api/toggle_fav',
+    [authJwt.verifyToken],
+    controller.toggleFav
   );
 };

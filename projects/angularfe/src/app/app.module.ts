@@ -11,6 +11,14 @@ import { AuthInterceptorService } from './auth-interceptor.service'; // this wil
 import { HomeComponent } from './home/home.component'; // implements the home route
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { RssItemsComponent } from './rss-items/rss-items.component';
+import { HtmlspecialcharsdecodePipe } from './htmlspecialcharsdecode.pipe';
+import { HtmlspecialcharsPipe } from './htmlspecialchars.pipe';
+import { GmdatePipe } from './gmdate.pipe';
+import { Nl2brPipe } from './nl2br.pipe';
+import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
+import { LinktargetPipe } from './linktarget.pipe';
+import {AuthGuardService} from "./_services/auth-guard.service";
 
 
 @NgModule({
@@ -18,16 +26,24 @@ import { ProfileComponent } from './profile/profile.component';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    RssItemsComponent,
+    HtmlspecialcharsdecodePipe,
+    HtmlspecialcharsPipe,
+    GmdatePipe,
+    Nl2brPipe,
+    LinktargetPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxBootstrapIconsModule.pick(allIcons)
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

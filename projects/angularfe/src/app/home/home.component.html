@@ -1,37 +1,81 @@
 
 <div class="row">
-  <div class="col-2">
+  <div class="col-2" id="sidebar">
     <ul>
-      <li><span><b>Unread {{ unread ? '(' + unread + ')' : '' }}</b></span></li>
+      <li [ngClass]="{'active' : what=='unread' && how=='paged' && feed==null}">
+        <a (click)="what='unread';how='paged';feed=null;">
+          <span [ngStyle]="{ 'color' : unread ? 'red' : 'black' }">
+            <b>Unread {{ unread ? '(' + unread + ')' : '' }}</b>
+          </span>
+        </a>
+      </li>
 
-      <li>Starred {{ starred ? '(' + starred + ')' : '' }}</li>
+      <li [ngClass]="{'active' : what=='star' && how=='paged'}">
+        <a (click)="what='star';how='paged';feed=null;">
+          Starred {{ starred ? '(' + starred + ')' : '' }}
+        </a>
+      </li>
     </ul>
 
-    <div [innerHTML]="tagstbl"></div>
+    <div id="tags">
+      <table id="taglist" class="table table-striped table-sm">
+        <thead>
+          <tr class="heading">
+            <th>
+              <span class="unread">#</span>
+            </th>
+            <th class="title">
+              tag name
+            </th>
+            <th class="controls">
+              untag
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tagsjson" [ngClass]="{'active' : (what && what.includes(row['tag_name']) && feed==null)}">
+            <td class="unread">
+              <ng-template [ngIf]="row['unread'] > 0">
+                <a class="unread" (click)="what=row['tag_name'] + ' unread';how='paged';feed=null;">{{ row['unread'] }}</a>/
+              </ng-template>
+
+              <a href="javascript:void(0);" (click)="what=row['tag_name'];how='paged';feed=null;">{{ row['count'] }}</a>
+            </td>
+            <td class="title">
+              <b>
+                <a (click)="what=row['tag_name'];how='paged';feed=null;">{{ row['tag_name'] }}</a>
+              </b>
+            </td>
+            <td class="controls">
+              <a title="untag all items" (click)="del_tag(row['tag_name']);">[x]</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div id="feeds">
-      <table>
+      <table class="table table-striped table-sm">
         <thead>
           <tr class="heading">
             <th *ngFor="let column of columns" class="{{ column_class[column] }}">
               <span class="nowrap">
-                <a href="#" title="{{ title[column] }}" [innerHTML]="name[column] + (column == order ? (direction == 'asc' ? '&darr;' : '&uarr;') : '')">
+                <a (click)="direction=(column == order ? (direction == 'asc' ? 'desc' : 'asc') : 'desc');order=column;" title="{{ title[column] }}" [innerHTML]="name[column] + (column == order ? (direction == 'asc' ? '&darr;' : '&uarr;') : '')">
                 </a>
               </span>
             </th>
-            <th class="controls"></th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let row of Object.keys(sidebar)" class="feed">
+        <tbody *ngIf="sidebar !== undefined">
+          <tr *ngFor="let row of Object.keys(sidebar)" class="feed" [ngClass]="{'active' : (feed==sidebar[row]['feed_id'])}">
             <td class="updated"><span title="{{ sidebar[row]['agestr'] }}" id="{{ sidebar[row]['feed_id'] }}-agestr">{{ sidebar[row]['agestrabbr'] }}</span></td>
             <td class="latest"><span title="{{ sidebar[row]['lateststr'] }}" id="{{ sidebar[row]['feed_id'] }}-lateststr">{{ sidebar[row]['lateststrabbr'] }}</span></td>
             <td style="unread" class="nowrap" id="{{ sidebar[row]['feed_id'] }}-items">
-              <ng-template [ngIf]="sidebar[row]['feed_unread'] > 0"><a class="unread" (click)="feed=sidebar[row]['feed_id'];what=null" title="new items">{{ sidebar[row]['feed_unread'] }}</a>/</ng-template>
-              <a (click)="feed=sidebar[row]['feed_id'];what='all';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
+              <ng-template [ngIf]="sidebar[row]['feed_unread'] > 0"><a class="unread" (click)="feed=sidebar[row]['feed_id'];what=null;how='paged';" title="new items">{{ sidebar[row]['feed_unread'] }}</a>/</ng-template>
+              <a (click)="feed=sidebar[row]['feed_id'];what='all';how='paged';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
             </td>
             <td class="source">
-              <a href="{{ sidebar[row]['feed_url'] }}">
+              <a target="_blank" href="{{ sidebar[row]['feed_url'] }}">
                 <ng-template let-image [ngIf]="((sidebar[row]['display_image'] == null || sidebar[row]['display_image'].length == 0) ? (sidebar[row]['feed_image'] == null || sidebar[row]['feed_image'].length == 0 ? fof_asset['feed_icon'] : sidebar[row]['feed_image']) : sidebar[row]['display_image'])">
                 <img class="feed-icon"
                      src="https://feed.newsbox.ro/{{ image }}"
@@ -52,16 +96,6 @@
     </div>
   </div>
   <div class="col-10">
-    <p>{{ content | json }}</p>
-
-    $items = fof_get_items(fof_current_user(), $feed, $what, $when, $which, $howmany, $order, $search);<br>
-    feed={{ feed }}<br>
-    what={{ what }}<br>
-    when={{ when }}<br>
-    which={{ which }}<br>
-    howmany={{ howmany }}<br>
-    order={{ order }}<br>
-    search={{ search }}<br>
-
+    <app-rss-items (starEvent)="refreshList();" (readEvent)="refreshList();" [feed]="feed" [what]="what" [when]="when" [which]="which" [howmany]="howmany" [(how)]="how" [order]="order" [search]="search"></app-rss-items>
   </div>
 </div>

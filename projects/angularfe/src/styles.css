@@ -14,3 +14,74 @@
 a, a * {
   cursor: pointer;
 }
+
+#sidebar table {
+  font-size: .7em;
+  border-collapse: collapse;
+}
+
+#sidebar .heading {
+  background: #ccc;
+  border-bottom: 1px solid gray;
+}
+
+#tags .unread, #feeds .unread {
+  text-align: right;
+}
+
+.unread {
+  font-weight: bold !important;
+  color: red !important;
+}
+
+#sidebar .controls {
+  text-align: right;
+}
+
+#sidebar a {
+  text-decoration: none;
+  color: black;
+}
+
+#sidebar ul {
+  font-size: .8em;
+  padding-left: 0em;
+  list-style: none;
+  margin: 1ex 0px;
+}
+
+#sidebar li.active,
+#tags tr.active,
+#feeds tr.active {
+  background: #ccc;
+  border: 1px #999;
+}
+
+.item .item-title {
+  font-size: 110%;
+}
+
+h2 {
+  font-size: 100%;
+  margin: 0px;
+  margin-bottom: 5px;
+  font-weight: normal;
+  display: inline;
+}
+
+.meta {
+  font-size: 80%;
+  display: inline;
+}
+
+.item {
+  margin: 0 0 1ex;
+  clear: both;
+  overflow: hidden;
+}
+
+.item .body {
+  max-height: 45em;
+  min-height: 10em;
+  overflow: auto;
+}

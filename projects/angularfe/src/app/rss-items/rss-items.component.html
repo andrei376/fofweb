@@ -1,0 +1,65 @@
+
+<div>
+  {{ display_summary }}
+</div>
+  <br>
+
+<nav *ngIf="navlinks.length">
+  <ul class="pagination justify-content-center">
+    <li *ngFor="let nav of navlinks" class="page-item">
+      <a (click)="which=nav.which;how=nav.how;howChange.emit(how);" class="page-link" [innerHTML]="nav.title"></a>
+    </li>
+  </ul>
+</nav>
+
+<div *ngFor="let row of items">
+  <div class="item" id="i{{ row['item_id'] }}">
+    <div class="card">
+      <div class="card-header">
+        <div class="float-start">
+            <div *ngIf="(row['tags'].indexOf('star') != -1); then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <a (click)="toggleFav(row['item_id'], true)">
+              <i-bs name="star-fill" class="text-warning"></i-bs>
+              </a>
+            </ng-template>
+            <ng-template #elseBlock>
+              <a (click)="toggleFav(row['item_id'], false)">
+              <i-bs name="star" class="text-warning"></i-bs>
+              </a>
+            </ng-template>
+          &nbsp;
+          <a [href]="row['item_link'] | htmlspecialcharsdecode" target="_blank" rel="noopener" class="item-title">{{ row['item_title'] }}</a>
+          <br>
+          <h2>
+            <ng-template let-image [ngIf]="((row['display_image'] == null || row['display_image'].length == 0) ? (row['feed_image'] == null || row['feed_image'].length == 0 ? fof_asset['feed_icon'] : row['feed_image']) : row['display_image'])">
+              <img class="feed-icon"
+                   alt="feed icon"
+                   src="https://feed.newsbox.ro/{{ image }}"
+              />
+            </ng-template>
+            &nbsp;
+            <a target="_blank" href="{{ row['feed_link'] }}" title="{{ row['feed_description'] | htmlspecialchars }}">{{ row['display_title'] }}</a>
+            &nbsp;
+          </h2>
+          <span class="meta published">on {{ row['item_published'] + (2*60*60) | gmdate: 'Y-n-d G:i' }}</span>
+        </div>
+        <div class="float-end">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
+          <br>
+          <ng-template ngFor let-tag [ngForOf]="row['tags']">
+            <span *ngIf="!['unread','star','folded'].includes(tag);">
+              {{ tag }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="card-body body" [innerHTML]="row['item_content'] | nl2br | linktarget">
+
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
+      </div>
+    </div>
+  </div>
+</div>

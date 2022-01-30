@@ -8,6 +8,11 @@ const isset = require('locutus/php/var/isset');
 const htmlentities = require('locutus/php/strings/htmlentities');
 const json_encode = require('locutus/php/json/json_encode');
 const in_array = require('locutus/php/array/in_array');
+const explode = require('locutus/php/strings/explode');
+const is_numeric = require('locutus/php/var/is_numeric');
+const strtoupper = require('locutus/php/strings/strtoupper');
+const is_array = require('locutus/php/var/is_array');
+const substr = require('locutus/php/strings/substr');
 
 
 const Sequelize = require("sequelize");
@@ -79,6 +84,100 @@ db.fof_db_get_tag_id_map = async function(tags = null, invalidate = null) {
     r.push(tag_id_to_name[t]);
   });
   return r;
+};
+
+db.fof_db_subscription_feed_get = async function($user_id, $feed_id) {
+
+  let $query = "SELECT f.*, s.subscription_prefs FROM fof_feed f, fof_subscription s WHERE s.user_id = :user_id AND s.feed_id = :feed_id AND s.feed_id = f.feed_id";
+
+  let $result = await sequelize.query(
+    $query,
+    {
+      replacements: {
+        user_id: $user_id,
+        feed_id: $feed_id
+      },
+      type: QueryTypes.SELECT
+    }
+  );
+
+  // console.log('result1=', $result[0]);
+
+  db.fof_db_subscription_feed_fix($result[0]);
+
+  // console.log('result2=', $result[0]);
+
+  return $result[0];
+};
+
+db.fof_db_get_tag_name_map = async function($tags) {
+  const $FOF_TAG_TABLE = 'fof_tag';
+
+  let $tag_name_to_id = {};
+
+  let $query = "SELECT * FROM " + $FOF_TAG_TABLE;
+
+  let rows = await sequelize.query(
+    $query,
+    {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  rows.forEach(row => {
+    $tag_name_to_id[row['tag_name']] = row['tag_id'];
+  });
+
+  let $r = [];
+
+  $tags.forEach($t => {
+    if (!empty($tag_name_to_id[$t])) {
+      $r.push($tag_name_to_id[$t]);
+    }
+  });
+
+  return $r;
+};
+
+db.fof_untag = async function($user_id, $tag) {
+  let $tags = [];
+  $tags.push($tag);
+
+  let $tag_ids = await this.fof_db_get_tag_name_map($tags);
+
+  if (empty($tag_ids)) {
+    return false;
+  }
+
+  return this.fof_db_untag_user_all($user_id, $tag_ids);
+};
+
+db.fof_db_untag_user_all = async function($user_id, $tag_ids) {
+  const $FOF_ITEM_TAG_TABLE = 'fof_item_tag';
+
+  if (!is_array($tag_ids)) {
+    $tag_ids = [$tag_ids];
+  }
+
+  if (empty($tag_ids)) {
+    return false;
+  }
+
+  let $query = "DELETE FROM "+$FOF_ITEM_TAG_TABLE+" WHERE user_id = :user_id AND tag_id IN ("
+    + ($tag_ids.length>0 ? implode(', ', $tag_ids) : "''")
+    + ")";
+
+  await sequelize.query(
+    $query,
+    {
+      replacements: {
+        user_id: $user_id,
+      },
+      type: QueryTypes.DELETE
+    }
+  );
+
+  return true;
 };
 
 db.fof_db_subscription_feed_fix = function($f) {
@@ -197,6 +296,10 @@ db.fof_nice_time_stamp = function($age) {
 db.fof_db_get_item_count = async function($user_id, $what = 'all', $feed_id = null, $search = null) {
   let $what_q = [];
 
+  if ($what === null) {
+    $what = 'unread';
+  }
+
   if ($what === 'starred') {
     $what = 'star';
   }
@@ -207,7 +310,6 @@ db.fof_db_get_item_count = async function($user_id, $what = 'all', $feed_id = nu
     $what_q.push('"' + $w + '"');
   });
 
-  // console.log('what_q=', $what_q);
   let $query = "";
 
   if ($what === 'all') {
@@ -312,6 +414,16 @@ db.fof_multi_sort = function ($tab,$key,$rev) {
   let $compare = function($a, $b) {
     let $la = strtolower($a[$key]);
     let $lb = strtolower($b[$key]);
+
+    if (in_array($key, ['feed_age', 'max_date', 'feed_unread'])) {
+      $la = parseInt($la, 10);
+      $lb = parseInt($lb, 10);
+    }
+
+    // console.log('key=', $key);
+    // console.log('la=', $la);
+    // console.log('lb=', $lb);
+
     if ($la == $lb) {
       return 0;
     }
@@ -420,8 +532,94 @@ db.fof_get_feeds = async function($user_id, $order = 'feed_title', $direction = 
     [$feeds[$i]['lateststr'], $feeds[$i]['lateststrabbr']] = db.fof_nice_time_stamp($row['max_date']);
   });
 
+  if ($order == 'feed_title') {
+    $order = 'display_title';
+  }
+
   return db.fof_multi_sort($feeds, $order, $direction != 'asc');
 };
+
+db.fof_db_mark_read = async function($user_id, $items) {
+  let $tag_id = await db.fof_db_get_tag_by_name('unread');
+  return await db.fof_db_untag_items($user_id, $tag_id, $items);
+};
+
+db.fof_db_tag_items = async function($user_id, $tag_id, $items) {
+  if (! $items) {
+    return false;
+  }
+
+  if (! is_array($items)) {
+    $items = [ $items ];
+  }
+
+  if (empty($items)) {
+    return false;
+  }
+
+  let $items_q = [];
+
+  $items.forEach($id => {
+    $items_q.push('(' + $user_id + ', ' + $tag_id + ', ' + $id + ')');
+  });
+
+  // console.log($items_q);
+
+  let $query = "INSERT IGNORE INTO fof_item_tag (user_id, tag_id, item_id) VALUES " + implode(', ', $items_q);
+
+  // console.log($query);
+
+  await sequelize.query(
+    $query,
+    {
+      type: QueryTypes.INSERT
+    }
+  );
+
+  return true;
+};
+
+db.fof_db_untag_items = async function($user_id, $tag_id, $items) {
+  if (! $items) {
+    return false;
+  }
+
+  if (! is_array($items)) {
+    $items = [$items];
+  }
+
+  // console.log($items);
+
+  let $items_q = [];
+
+  $items.forEach($id => {
+    $items_q.push('"' + $id + '"');
+  });
+
+  // console.log($items_q);
+
+  let $replacements = {};
+
+  let $query = "DELETE FROM fof_item_tag " +
+    "WHERE user_id = :user_id AND " +
+    "tag_id = :tag_id AND " +
+    "item_id IN ( " + ($items_q.length ? implode(', ', $items_q) : "''") + " )";
+
+  $replacements['user_id'] = $user_id;
+  $replacements['tag_id'] = $tag_id;
+
+  // console.log($query);
+
+  await sequelize.query(
+    $query,
+    {
+      replacements: $replacements,
+      type: QueryTypes.DELETE
+    }
+  );
+
+  return true;
+}
 
 db.fof_db_get_tag_by_name = async function($tags) {
   let $tags_q = [];
@@ -535,6 +733,181 @@ db.fof_get_tags = async function($user_id) {
   return $tags;
 };
 
+db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $when = null, $start = null, $limit = null, $order = 'desc', $search = null) {
+  let $all_items = {};
+
+  let $prefs = db.fof_db_prefs_get($user_id);
+
+  if ($what == null) {
+    $what = 'unread';
+  }
+
+  if ($order != 'asc' && $order != 'desc') {
+    $order = 'desc';
+  }
+
+  let $select = "SELECT i.*, f.*, s.subscription_prefs";
+  let $from = " FROM fof_feed f, fof_item i, fof_subscription s";
+
+  if ($what != 'all') {
+    $from += ", fof_tag t, fof_item_tag it";
+  }
+
+  let $where = " WHERE s.user_id = " + $user_id + " AND s.feed_id = f.feed_id AND f.feed_id = i.feed_id";
+
+  if (! empty($feed)) {
+    $where += " AND f.feed_id = " + $feed;
+  }
+
+  let $tags_q = [];
+
+  if ($what != 'all') {
+    let whats = explode(' ', $what);
+
+    for (let $i in whats) {
+      let $tag = "'" + whats[$i] + "'";
+
+      $tags_q.push($tag);
+    }
+
+    $where += " AND it.user_id = s.user_id AND it.tag_id = t.tag_id AND i.item_id = it.item_id AND t.tag_name IN (" + ($tags_q.length > 0 ? implode(', ', $tags_q) : "''") + ")";
+  }
+
+  let $group = "";
+  if ($what == 'all') {
+    //
+  } else {
+    $group = " GROUP BY i.item_id HAVING COUNT( i.item_id ) = " + $tags_q.length;
+  }
+
+  /*if (! empty($search)) {
+    $search_q = $fof_connection->quote('%' . $search . '%');
+    $where .= " AND (i.item_title LIKE $search_q OR i.item_content LIKE $search_q )";
+  }*/
+
+  /*if (! empty($when)) {
+    $tzoffset = isset($prefs['tzoffset']) ? $prefs['tzoffset'] : 0;
+    $whendate = explode('/', ($when == 'today') ? fof_todays_date() : $when);
+    $when_begin = gmmktime(0, 0, 0, $whendate[1], $whendate[2], $whendate[0]) - ($tzoffset * 60 * 60);
+    $when_end = $when_begin + (24 * 60 * 60);
+    $where .= " AND i.item_published > " . $fof_connection->quote($when_begin) . " AND i.item_published < " . $fof_connection->quote($when_end);
+  }*/
+
+  let $order_by = " ORDER BY i.item_published " + strtoupper($order);
+  if (is_numeric($start)) {
+    $order_by += " LIMIT " + $start + ", " + ((is_numeric($limit)) ? $limit : $prefs['howmany']);
+  }
+
+  let $query = $select + $from + $where + $group + $order_by;
+
+  // console.log('query=', $query);
+
+  let $result = await sequelize.query(
+    $query,
+    {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  let $item_ids_q = [];
+  let $lookup = {}; /* remember item_id->all_rows mapping, for populating tags */
+  let $idx = 0;
+
+  $result.forEach($row => {
+    // console.log('row=', $row);
+    db.fof_db_subscription_feed_fix($row);
+    $item_ids_q.push($row['item_id']);
+    $lookup[ $row['item_id'] ] = $idx;
+    $all_items[$idx] = $row;
+    $all_items[$idx]['tags'] = [];
+    $idx += 1;
+  });
+
+  $all_items = db.fof_multi_sort($all_items, 'item_published', $order != "asc");
+
+  $query = "SELECT t.tag_name, it.item_id" +
+  " FROM fof_tag t, fof_item_tag it" +
+  " WHERE t.tag_id = it.tag_id" +
+  " AND it.item_id IN (" + ($item_ids_q.length > 0 ? implode(',', $item_ids_q) : "''") + ")" +
+  " AND it.user_id = " + $user_id;
+
+  // console.log(" second query: ", $query);
+
+  $result = await sequelize.query(
+    $query,
+    {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  $result.forEach($row => {
+    $idx = $lookup[$row['item_id']];
+    $all_items[$idx]['tags'].push($row['tag_name']);
+  });
+
+  return $all_items;
+};
+
+db.fof_get_items = async function($user_id, $feed = null, $what="unread", $when = null, $start = null, $limit = null, $order = "desc", $search = null) {
+
+  let resp = {
+    user: $user_id,
+    feed: $feed,
+    what: $what,
+    when: $when,
+    start: $start,
+    limit: $limit,
+    order: $order,
+    search: $search
+  };
+
+  // console.log(resp);
+
+  let $items = await db.fof_db_get_items($user_id, $feed, $what, $when, $start, $limit, $order, $search);
+
+  // console.log('items=', $items);
+
+
+  /*$items = fof_db_get_items($user_id, $feed, $what, $when, $start, $limit, $order, $search);
+
+  for($i=0; $i<count($items); $i++)
+  {
+    foreach($fof_item_filters as $filter)
+    {
+      $items[$i]['item_content'] = $filter($items[$i]['item_content']);
+    }
+  }*/
+
+  return $items;
+};
+
+db.fof_tag_item = async function($user_id, $item_id, $tag) {
+  let $tags = is_array($tag) ? $tag : [ $tag ];
+  // let $tag_id;
+
+  $tags.forEach(async ($tag) => {
+    // remove tag, if it starts with '-'
+    if ( $tag.charAt(0) == '-' ) {
+      db.fof_untag_item($user_id, $item_id, substr($tag, 1));
+    } else {
+      let $tag_id = await db.fof_db_get_tag_by_name($tag);
+      if ($tag_id === null) {
+        //$tag_id = fof_db_create_tag($tag);
+      } else {
+        db.fof_db_tag_items($user_id, $tag_id, $item_id);
+      }
+    }
+  });
+
+  return true;
+};
+
+db.fof_untag_item = async function($user_id, $item_id, $tag) {
+  let $tag_id = await db.fof_db_get_tag_by_name($tag);
+
+  return db.fof_db_untag_items($user_id, $tag_id, $item_id);
+};
+
 db.fof_sidebar_tags_default = async function($user_id) {
   let $unread_id = await db.fof_db_get_tag_by_name('unread');
   let $star_id = await db.fof_db_get_tag_by_name('star');
@@ -546,10 +919,11 @@ db.fof_sidebar_tags_default = async function($user_id) {
   // console.log($tags);
 
   let $taglines = [];
+  let $json = [];
   let $n = 0;
 
   for (let $tag of $tags) {
-    console.log($tag);
+    // console.log($tag);
     let $tag_id = $tag['tag_id'];
     if (
       $tag_id == $unread_id
@@ -607,9 +981,11 @@ db.fof_sidebar_tags_default = async function($user_id) {
     $tagline += '</tr>';
 
     $taglines.push($tagline);
+
+    $json.push($tag);
   }
 
-  let $content = "";
+  /*let $content = "";
 
   if (!empty($taglines)) {
     $content += '<div id="tags">';
@@ -641,8 +1017,10 @@ db.fof_sidebar_tags_default = async function($user_id) {
     $content += '</table>';
 
     $content += '</div>';
-  }
+  }*/
 
-  return $content;
+  return {
+    tagsjson: $json
+  };
 };
 module.exports = db;
