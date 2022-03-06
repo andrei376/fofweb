@@ -47,7 +47,7 @@
           </h2>
           <span class="meta published">on {{ row['item_published'] + (2*60*60) | gmdate: 'Y-n-d G:i' }}</span>
         </div>
-        <div class="float-end">
+        <div class="float-end text-end">
           <button *ngIf="row['tags'].includes('unread');" type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
           <br>
           <ng-template ngFor let-tag [ngForOf]="row['tags']">
