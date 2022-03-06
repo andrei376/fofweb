@@ -1,5 +1,6 @@
 module.exports = {
-  HOST: 'localhost',
+  HOST2: 'localhost',
+  HOST: 'host.docker.internal',
   USER: 'root',
   PASSWORD: '',
   DB: "fofgit",

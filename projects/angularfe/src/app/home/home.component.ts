@@ -132,7 +132,7 @@ export class HomeComponent implements OnInit {
         this.unread = $unread;
         this.starred = $starred;
 
-        this.how = 'paged';
+        //this.how = 'paged';
 
         if ($unread > 0) {
           document.title = '(' + $unread + ') Feed on Feeds';

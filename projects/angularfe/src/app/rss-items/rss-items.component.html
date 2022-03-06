@@ -1,16 +1,19 @@
 
 <div>
-  {{ display_summary }}
+  {{ display_summary }} &nbsp;
 </div>
   <br>
 
-<nav *ngIf="navlinks.length">
+<nav *ngIf="navlinks.length; else elseBlock">
   <ul class="pagination justify-content-center">
+    <li class="page-link invisible">&nbsp;</li>
     <li *ngFor="let nav of navlinks" class="page-item">
       <a (click)="which=nav.which;how=nav.how;howChange.emit(how);" class="page-link" [innerHTML]="nav.title"></a>
     </li>
   </ul>
 </nav>
+<ng-template #elseBlock><div style="height: 38px; margin-bottom: 1rem;">&nbsp;</div></ng-template>
+
 
 <div *ngFor="let row of items">
   <div class="item" id="i{{ row['item_id'] }}">
@@ -45,7 +48,7 @@
           <span class="meta published">on {{ row['item_published'] + (2*60*60) | gmdate: 'Y-n-d G:i' }}</span>
         </div>
         <div class="float-end">
-          <button type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
+          <button *ngIf="row['tags'].includes('unread');" type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
           <br>
           <ng-template ngFor let-tag [ngForOf]="row['tags']">
             <span *ngIf="!['unread','star','folded'].includes(tag);">
@@ -58,7 +61,7 @@
 
       </div>
       <div class="card-footer">
-        <button type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
+        <button *ngIf="row['tags'].includes('unread');" type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
       </div>
     </div>
   </div>

@@ -60,6 +60,25 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
     return data;
   }
 
+  loadMore(): boolean {
+    //load 1 more only if paged
+
+    //actually it does refresh the current page
+
+    this.getItems(
+      this.feed,
+      this.what,
+      this.when,
+      this.which,
+      this.howmany,
+      this.how,
+      this.order,
+      this.search
+    );
+
+    return false;
+  }
+
   markRead(id: any): boolean {
     this.userService.markRead(id).subscribe(
       data => {
@@ -71,6 +90,8 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
         item.remove();
 
         this.readEvent.emit(id);
+
+        this.loadMore();
         return true;
       },
       err => {
@@ -265,6 +286,8 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
       }
 
       $title += " " + $itemcount;
+    } else {
+      $title += " " + $itemcount;
     }
 
     $title += ' item' + ($itemcount != 1 ? 's' : '');
@@ -277,7 +300,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
 
       // console.log('feed2=', $feed2);
 
-      $title += ' in \'' + htmlentities($feed2['display_title']) + '\'';
+      $title += ' in \'' + ($feed2['display_title']) + '\'';
     }
 
     if (empty($what)) {
