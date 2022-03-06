@@ -82,6 +82,10 @@ h2 {
   overflow: hidden;
 }
 
+.item a {
+  text-decoration: none;
+}
+
 .item .body {
   max-height: 45em;
   min-height: 10em;
