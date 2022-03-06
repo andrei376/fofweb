@@ -13,6 +13,8 @@ const is_numeric = require('locutus/php/var/is_numeric');
 const strtoupper = require('locutus/php/strings/strtoupper');
 const is_array = require('locutus/php/var/is_array');
 const substr = require('locutus/php/strings/substr');
+const time = require('locutus/php/datetime/time');
+const intval = require("locutus/php/var/intval");
 
 
 const Sequelize = require("sequelize");
@@ -226,8 +228,8 @@ db.fof_db_get_subscriptions = async function($user_id, $dueOnly = false) {
 };
 
 db.fof_nice_time_stamp = function($age) {
-  let timestamp = Math.floor(new Date().getTime() / 1000);
-
+  //let timestamp = Math.floor(new Date().getTime() / 1000);
+  let timestamp = time();
   $age = timestamp - $age;
 
   if ($age === 0) {
@@ -256,31 +258,31 @@ db.fof_nice_time_stamp = function($age) {
     'w'
     ];
   }
-  else if ($days) {
+  else if ($days > 1) {
     return [
       $days + ' day' + ($days === 1 ? '' : 's') + ' ago',
       $days + 'd'
     ];
   }
 
-  let $hours = $age / 60 / 60 % 24;
-  if ($hours) {
+  let $hours = intval($age / 60 / 60 % 24);
+  if ($hours > 1) {
     return [
       $hours + ' hour' + ($hours === 1 ? '' : 's') + ' ago',
       $hours + 'h'
     ];
   }
 
-  let $minutes = $age / 60 % 60;
-  if ($minutes) {
+  let $minutes = intval($age / 60 % 60);
+  if ($minutes > 1) {
     return [
       $minutes + ' minute' + ($minutes === 1 ? '' : 's') + ' ago',
       $minutes + 'm'
     ];
   }
 
-  let $seconds = $age % 60;
-  if ($seconds) {
+  let $seconds = intval($age % 60);
+  if ($seconds > 1) {
     return [
       $seconds + ' second' + ($seconds === 1 ? '' : 's') + ' ago',
       $seconds + 's'
