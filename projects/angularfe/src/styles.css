@@ -92,3 +92,7 @@ h2 {
 .unread-item {
   font-weight: bold;
 }
+
+.bg-gray {
+  background-color: #ddd !important;
+}
