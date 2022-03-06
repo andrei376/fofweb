@@ -59,6 +59,7 @@ a, a * {
 
 .item .item-title {
   font-size: 110%;
+  font-family: arial, sans-serif;
 }
 
 h2 {
@@ -72,6 +73,7 @@ h2 {
 .meta {
   font-size: 80%;
   display: inline;
+  font-family: verdana, sans-serif;
 }
 
 .item {
@@ -84,4 +86,9 @@ h2 {
   max-height: 45em;
   min-height: 10em;
   overflow: auto;
+  font-family: verdana, sans-serif;
+}
+
+.unread-item {
+  font-weight: bold;
 }
