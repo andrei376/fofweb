@@ -136,6 +136,8 @@ export class HomeComponent implements OnInit {
 
         if ($unread > 0) {
           document.title = '(' + $unread + ') Feed on Feeds';
+        } else {
+          document.title = 'Feed on Feeds';
         }
       },
       err => {
