@@ -735,7 +735,7 @@ db.fof_get_tags = async function($user_id) {
   return $tags;
 };
 
-db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $when = null, $start = null, $limit = null, $order = 'desc', $search = null) {
+db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $when = null, $start = null, $limit = null, $order = 'asc', $search = null) {
   let $all_items = {};
 
   let $prefs = db.fof_db_prefs_get($user_id);
@@ -745,7 +745,7 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
   }
 
   if ($order != 'asc' && $order != 'desc') {
-    $order = 'desc';
+    $order = 'asc';
   }
 
   let $select = "SELECT i.*, f.*, s.subscription_prefs";
