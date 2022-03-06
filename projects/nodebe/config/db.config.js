@@ -1,8 +1,8 @@
 module.exports = {
-  HOST2: 'localhost',
-  HOST: 'host.docker.internal',
-  USER: 'root',
-  PASSWORD: '',
+  HOST: 'localhost',
+  HOST2: 'host.docker.internal',
+  USER: 'fofgit',
+  PASSWORD: 'parolafofgit',
   DB: "fofgit",
   dialect: "mysql",
   pool: {
