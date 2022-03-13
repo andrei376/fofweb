@@ -46,6 +46,7 @@ a, a * {
 a.button {
   padding: 0 0.5em;
   border: 0.1px solid black;
+  border-radius: 5px;
 }
 
 a.button.unread {
