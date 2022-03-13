@@ -15,7 +15,7 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor(private token: TokenStorageService, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("Interception In Progress"); // Interception Stage
+    // console.log("Interception In Progress"); // Interception Stage
 
     let authReq = req;
     const token = this.token.getToken();
@@ -33,6 +33,9 @@ export class AuthInterceptorService implements HttpInterceptor {
           // Catching Error Stage
           if (error && error.status === 401) {
             console.log("ERROR 401 UNAUTHORIZED") // in case of an error response the error message is displayed
+            //do logout
+            this.token.signOut();
+
             this.router.navigateByUrl('/login');
           }
           const err = error.error.message || error.statusText;

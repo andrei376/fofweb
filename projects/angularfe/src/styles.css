@@ -25,7 +25,7 @@ a, a * {
   border-bottom: 1px solid gray;
 }
 
-#tags .unread, #feeds .unread {
+#tags .td-unread, #feeds .unread {
   text-align: right;
 }
 
@@ -41,6 +41,15 @@ a, a * {
 #sidebar a {
   text-decoration: none;
   color: black;
+}
+
+a.button {
+  padding: 0 0.5em;
+  border: 0.1px solid black;
+}
+
+a.button.unread {
+  border-color: red !important;
 }
 
 #sidebar ul {

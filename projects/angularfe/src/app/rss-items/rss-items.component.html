@@ -19,7 +19,7 @@
   <div class="item" id="i{{ row['item_id'] }}">
     <div class="card">
       <div class="card-header bg-gray">
-        <div class="float-start">
+        <div class="float-start col-xxl-11 col-xl-10 col-9">
             <div *ngIf="(row['tags'].indexOf('star') != -1); then thenBlock else elseBlock"></div>
             <ng-template #thenBlock>
               <a (click)="toggleFav(row['item_id'], true)">
@@ -47,7 +47,7 @@
           </h2>
           <span class="meta published">on {{ row['item_published'] + (2*60*60) | gmdate: 'Y-n-d G:i' }}</span>
         </div>
-        <div class="float-end text-end">
+        <div class="col-xxl-1 col-xl-2 col-3 float-end text-end">
           <button *ngIf="row['tags'].includes('unread');" type="button" class="btn btn-secondary btn-sm" (click)="markRead(row['item_id']);">mark read</button>
           <br>
           <ng-template ngFor let-tag [ngForOf]="row['tags']">

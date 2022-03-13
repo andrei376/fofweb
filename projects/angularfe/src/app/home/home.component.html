@@ -8,6 +8,8 @@
             <b>Unread {{ unread ? '(' + unread + ')' : '' }}</b>
           </span>
         </a>
+
+        <a class="float-end button" (click)="refreshList();"><i-bs name="arrow-clockwise"></i-bs></a>
       </li>
 
       <li [ngClass]="{'active' : what=='star' && how=='paged'}">
@@ -34,12 +36,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of tagsjson" [ngClass]="{'active' : (what && what.includes(row['tag_name']) && feed==null)}">
-            <td class="unread">
+            <td class="td-unread">
               <ng-template [ngIf]="row['unread'] > 0">
-                <a class="unread" (click)="what=row['tag_name'] + ' unread';how='paged';feed=null;">{{ row['unread'] }}</a>/
+                <a class="button unread" (click)="what=row['tag_name'] + ' unread';how='paged';feed=null;">{{ row['unread'] }}</a> /
               </ng-template>
 
-              <a href="javascript:void(0);" (click)="what=row['tag_name'];how='paged';feed=null;">{{ row['count'] }}</a>
+              <a class="button" href="javascript:void(0);" (click)="what=row['tag_name'];how='paged';feed=null;">{{ row['count'] }}</a>
             </td>
             <td class="title">
               <b>
@@ -70,9 +72,9 @@
           <tr *ngFor="let row of Object.keys(sidebar)" class="feed" [ngClass]="{'active' : (feed==sidebar[row]['feed_id'])}">
             <td class="updated"><span title="{{ sidebar[row]['agestr'] }}" id="{{ sidebar[row]['feed_id'] }}-agestr">{{ sidebar[row]['agestrabbr'] }}</span></td>
             <td class="latest"><span title="{{ sidebar[row]['lateststr'] }}" id="{{ sidebar[row]['feed_id'] }}-lateststr">{{ sidebar[row]['lateststrabbr'] }}</span></td>
-            <td class="nowrap" id="{{ sidebar[row]['feed_id'] }}-items">
-              <ng-template [ngIf]="sidebar[row]['feed_unread'] > 0"><a class="unread" (click)="feed=sidebar[row]['feed_id'];what=null;how='paged';" title="new items">{{ sidebar[row]['feed_unread'] }}</a>/</ng-template>
-              <a (click)="feed=sidebar[row]['feed_id'];what='all';how='paged';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
+            <td class="nowrap text-nowrap" id="{{ sidebar[row]['feed_id'] }}-items">
+              <ng-template [ngIf]="sidebar[row]['feed_unread'] > 0"><a class="button unread" (click)="feed=sidebar[row]['feed_id'];what=null;how='paged';" title="new items">{{ sidebar[row]['feed_unread'] }}</a> / </ng-template>
+              <a class="button" (click)="feed=sidebar[row]['feed_id'];what='all';how='paged';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
             </td>
             <td class="source">
               <a target="_blank" href="{{ sidebar[row]['feed_url'] }}">

@@ -235,7 +235,7 @@ db.fof_nice_time_stamp = function($age) {
   if ($age === 0) {
     return [
       'never',
-      '&infin;'
+      '∞'
     ];
   }
 
@@ -291,7 +291,7 @@ db.fof_nice_time_stamp = function($age) {
 
   return [
     'never',
-    '&infin;'
+    '∞'
   ];
 };
 

@@ -35,6 +35,8 @@ export class HomeComponent implements OnInit {
   which?: any;
   howmany?: any;
 
+  intervalId?: any;
+
   // readonly API_URL = 'http://localhost:3080';
   readonly API_URL = '/api';
 
@@ -97,6 +99,10 @@ export class HomeComponent implements OnInit {
       this.direction
     );
 
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
   }
 
   getTagsTable() {
@@ -213,5 +219,7 @@ export class HomeComponent implements OnInit {
       this.order,
       this.direction
     );
+
+    this.intervalId = setInterval(() => {this.refreshList();}, 300*1000);
   }
 }
