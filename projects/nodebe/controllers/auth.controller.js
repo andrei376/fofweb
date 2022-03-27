@@ -28,7 +28,7 @@ exports.signin = (req, res) => {
       }
 
       let token = jwt.sign({ id: user.user_id, username: user.user_name, roles: user.user_level }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        // expiresIn2: 86400 // 24 hours
       });
 
       res.status(200).send({

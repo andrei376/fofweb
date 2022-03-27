@@ -1,6 +1,5 @@
-
-<div class="row">
-  <div class="col-xxl-2 col-xl-3" id="sidebar">
+<div class="row clearfix">
+  <div class="flex-shrink-1 flex-grow-1 flex-nowrap col-xxl-2 col-xl-3 col-lg-4 col-md-5" id="sidebar">
     <ul>
       <li [ngClass]="{'active' : what=='unread' && how=='paged' && feed==null}">
         <a (click)="what='unread';how='paged';feed=null;">
@@ -56,7 +55,7 @@
       </table>
     </div>
 
-    <div id="feeds">
+    <div id="feeds" class="flex-nowrap d-table-row">
       <table class="table table-striped table-sm">
         <thead>
           <tr class="heading">
@@ -97,7 +96,7 @@
       </table>
     </div>
   </div>
-  <div class="col-xxl-10 col-xl-9">
+  <div class="flex-shrink-1 flex-grow-1 flex-nowrap col-xxl-9 col-xl-9 col-lg-8 col-md-7">
     <app-rss-items (starEvent)="refreshList();" (readEvent)="refreshList();" [feed]="feed" [what]="what" [when]="when" [which]="which" [howmany]="howmany" [(how)]="how" [order]="order" [search]="search"></app-rss-items>
   </div>
 </div>
