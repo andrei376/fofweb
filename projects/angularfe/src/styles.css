@@ -20,6 +20,10 @@ a, a * {
   border-collapse: collapse;
 }
 
+#feeds table td.title {
+  word-break: break-word;
+}
+
 #sidebar .heading {
   background: #ccc;
   border-bottom: 1px solid gray;
