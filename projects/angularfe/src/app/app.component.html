@@ -1,6 +1,6 @@
 <div id="app">
   <div class="container-fluid clearfix">
-    <div *ngIf="isLoggedIn" class="d-inline-block position-absolute" style="right: 0.75rem;">
+    <div *ngIf="isLoggedIn" class="d-inline-block position-absolute d-none d-md-block" style="right: 0.75rem;">
       <button class="btn btn-sm btn-dark" (click)="logout()">LogOut</button>
     </div>
     <router-outlet></router-outlet>
