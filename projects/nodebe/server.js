@@ -5,10 +5,18 @@ const cors          = require('cors');
 const app = express();
 const port = 3080;
 
+let RateLimit = require('express-rate-limit');
+let limiter = RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 60
+});
+
 let corsOptions = {
   origin: "http://localhost:4200"
 };
 
+// apply rate limiter to all requests
+app.use(limiter);
 app.use(cors(corsOptions));
 // app.options('*', cors());
 

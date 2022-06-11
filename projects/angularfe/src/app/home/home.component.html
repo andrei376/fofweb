@@ -76,7 +76,7 @@
               <a class="button" (click)="feed=sidebar[row]['feed_id'];what='all';how='paged';" title="all items, {{ sidebar[row]['feed_starred'] }} starred, {{ sidebar[row]['feed_tagged'] }} tagged">{{ sidebar[row]['feed_items'] }}</a>
             </td>
             <td class="source">
-              <a target="_blank" href="{{ sidebar[row]['feed_url'] }}">
+              <a target="_blank" rel="noopener noreferrer" href="{{ sidebar[row]['feed_url'] }}">
                 <ng-template let-image [ngIf]="((sidebar[row]['display_image'] == null || sidebar[row]['display_image'].length == 0) ? (sidebar[row]['feed_image'] == null || sidebar[row]['feed_image'].length == 0 ? fof_asset['feed_icon'] : sidebar[row]['feed_image']) : sidebar[row]['display_image'])">
                 <img class="feed-icon"
                      src="https://feed.newsbox.ro/{{ image }}"
@@ -87,7 +87,7 @@
               </a>
             </td>
             <td class="title">
-              <a href="{{ sidebar[row]['feed_link'] == '[no link]' ? sidebar[row]['feed_url'] : sidebar[row]['feed_link'] }}" title="home page" target="_blank">
+              <a rel="noopener noreferrer" href="{{ sidebar[row]['feed_link'] == '[no link]' ? sidebar[row]['feed_url'] : sidebar[row]['feed_link'] }}" title="home page" target="_blank">
                 <b>{{ sidebar[row]['display_title'].length == 0 ? sidebar[row]['feed_title'] : sidebar[row]['display_title'] }}</b>
               </a>
             </td>
