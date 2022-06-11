@@ -19,6 +19,7 @@ import { Nl2brPipe } from './nl2br.pipe';
 import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 import { LinktargetPipe } from './linktarget.pipe';
 import {AuthGuardService} from "./_services/auth-guard.service";
+import { NotifyTextComponent } from './notify-text/notify-text.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {AuthGuardService} from "./_services/auth-guard.service";
     HtmlspecialcharsPipe,
     GmdatePipe,
     Nl2brPipe,
-    LinktargetPipe
+    LinktargetPipe,
+    NotifyTextComponent
   ],
   imports: [
     BrowserModule,

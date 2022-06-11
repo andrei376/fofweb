@@ -2,6 +2,7 @@
 <div>
   {{ display_summary }} &nbsp;
 </div>
+<app-notify-text [showText]="this.itemcount"></app-notify-text>
   <br>
 
 <nav *ngIf="navlinks.length; else elseBlock">

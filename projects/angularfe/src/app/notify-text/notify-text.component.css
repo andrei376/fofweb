@@ -1,0 +1,15 @@
+span {
+  color: #f7f6f6;
+  background-color: #1ec67f;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid #9ef7d2;
+  border-radius: 0.6rem;
+  transition: opacity ease-in-out 1s;
+  opacity: 0;
+  margin: auto;
+  display: inline;
+  position: fixed;
+  top: 1rem;
+  z-index: 99;
+  left: 50%;
+}
