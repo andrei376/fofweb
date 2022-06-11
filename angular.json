@@ -106,5 +106,8 @@
       }
     }
   },
-  "defaultProject": "angularfe"
+  "defaultProject": "angularfe",
+  "cli": {
+    "analytics": false
+  }
 }
