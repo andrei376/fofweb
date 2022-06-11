@@ -27,8 +27,6 @@ export class NotifyTextComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('in ngOnChanges');
-
     this.flashText();
   }
 }
