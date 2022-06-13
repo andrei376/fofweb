@@ -9,7 +9,7 @@ span {
   margin: auto;
   display: inline;
   position: fixed;
-  top: 1rem;
+  top: 2rem;
   z-index: 99;
   left: 14%;
 }
