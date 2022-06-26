@@ -22,10 +22,10 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "php-unserialize": "0.0.1",
-    "sequelize": "^6.20.1",
+    "sequelize": "^6.21.1",
     "ts-md5": "^1.2.11"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.18"
   }
 }
