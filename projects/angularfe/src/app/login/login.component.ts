@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   };
   isLoggedIn = false;
   isLoginFailed = false;
+  ajaxIsRunning = false;
   errorMessage = '';
   roles: string[] = [];
 
@@ -27,6 +28,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.ajaxIsRunning = true;
+
     const { username, password } = this.form;
 
     this.authService.login(username, password).subscribe(
@@ -45,6 +48,7 @@ export class LoginComponent implements OnInit {
         // console.log(err);
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
+        this.ajaxIsRunning = false;
       }
     );
   }
