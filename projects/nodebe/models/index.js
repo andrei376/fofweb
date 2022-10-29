@@ -844,6 +844,9 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
 
   $result.forEach($row => {
     $idx = $lookup[$row['item_id']];
+    if (!isset($all_items[$idx]['tags'])) {
+      $all_items[$idx]['tags'] = [];
+    }
     $all_items[$idx]['tags'].push($row['tag_name']);
   });
 
