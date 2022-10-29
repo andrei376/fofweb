@@ -25,6 +25,7 @@ const sequelize = new Sequelize(
   config.USER,
   config.PASSWORD,
   {
+    logging: false,                        // Disables logging
     host: config.HOST,
     dialect: config.dialect,
     operatorsAliases: false,
