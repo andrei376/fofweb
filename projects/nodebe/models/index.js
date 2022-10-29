@@ -802,7 +802,7 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
 
   let $query = $select + $from + $where + $group + $order_by;
 
-  // console.log('query=', $query);
+  console.log('query=', $query);
 
   let $result = await sequelize.query(
     $query,
@@ -833,7 +833,7 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
   " AND it.item_id IN (" + ($item_ids_q.length > 0 ? implode(',', $item_ids_q) : "''") + ")" +
   " AND it.user_id = " + $user_id;
 
-  // console.log(" second query: ", $query);
+  console.log(" second query: ", $query);
 
   $result = await sequelize.query(
     $query,
