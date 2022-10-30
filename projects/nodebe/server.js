@@ -8,7 +8,7 @@ const port = 3080;
 let RateLimit = require('express-rate-limit');
 let limiter = RateLimit({
   windowMs: 1*60*1000, // 1 minute
-  max: 160
+  max: 260
 });
 
 let corsOptions = {
