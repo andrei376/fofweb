@@ -242,10 +242,16 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
           err => {
             this.content = JSON.parse(err.error).message;
             this.ajaxIsRunning = false;
+          },
+          () => {
+            this.ajaxIsRunning = false;
           }
         );
       }, err => {
         alert(JSON.parse(err.error).message);
+        this.ajaxIsRunning = false;
+      },
+      () => {
         this.ajaxIsRunning = false;
       }
     );
