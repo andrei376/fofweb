@@ -20,6 +20,7 @@ const intval = require("locutus/php/var/intval");
 const Sequelize = require("sequelize");
 const { QueryTypes } = require('sequelize');
 const html_entity_decode = require("locutus/php/strings/html_entity_decode");
+const htmlspecialchars_decode = require("locutus/php/strings/htmlspecialchars_decode");
 
 const sequelize = new Sequelize(
   config.DB,
@@ -820,7 +821,7 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
   $result.forEach($row => {
     // console.log('row=', $row);
     db.fof_db_subscription_feed_fix($row);
-    $row['item_title'] = html_entity_decode($row['item_title']);
+    $row['item_title'] = htmlspecialchars_decode($row['item_title']);
 
     $item_ids_q.push($row['item_id']);
     $lookup[ $row['item_id'] ] = $idx;
