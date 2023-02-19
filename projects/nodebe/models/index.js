@@ -819,6 +819,8 @@ db.fof_db_get_items = async function($user_id, $feed = null, $what = 'unread', $
   $result.forEach($row => {
     // console.log('row=', $row);
     db.fof_db_subscription_feed_fix($row);
+    $row['item_title'] += 'TEST';
+
     $item_ids_q.push($row['item_id']);
     $lookup[ $row['item_id'] ] = $idx;
     $all_items[$idx] = $row;
