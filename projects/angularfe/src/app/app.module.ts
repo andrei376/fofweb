@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RssItemsComponent } from './rss-items/rss-items.component';
 import { HtmlspecialcharsdecodePipe } from './htmlspecialcharsdecode.pipe';
+import { HtmlentitydecodePipe } from "./htmlentitydecode.pipe";
 import { HtmlspecialcharsPipe } from './htmlspecialchars.pipe';
 import { GmdatePipe } from './gmdate.pipe';
 import { Nl2brPipe } from './nl2br.pipe';
@@ -31,6 +32,7 @@ import { NotifyTextComponent } from './notify-text/notify-text.component';
     RssItemsComponent,
     HtmlspecialcharsdecodePipe,
     HtmlspecialcharsPipe,
+    HtmlentitydecodePipe,
     GmdatePipe,
     Nl2brPipe,
     LinktargetPipe,
