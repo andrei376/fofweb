@@ -36,7 +36,7 @@
               </a>
             </ng-template>
           &nbsp;
-          <a [href]="row['item_link'] | htmlspecialcharsdecode" target="_blank" rel="noopener noreferrer" [ngClass]="{ 'unread-item' : row['tags'].includes('unread') }" class="item-title">{{ row['item_title'] | htmlspecialcharsdecode | htmlentitydecode }}</a>
+          <a [href]="row['item_link'] | htmlspecialcharsdecode" target="_blank" rel="noopener noreferrer" [ngClass]="{ 'unread-item' : row['tags'].includes('unread') }" class="item-title" [innerText]="row['item_title']"></a>
           <br>
           <h2>
             <ng-template let-image [ngIf]="((row['display_image'] == null || row['display_image'].length == 0) ? (row['feed_image'] == null || row['feed_image'].length == 0 ? fof_asset['feed_icon'] : row['feed_image']) : row['display_image'])">
