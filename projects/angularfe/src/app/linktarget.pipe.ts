@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'linktarget'
+    name: 'linktarget',
+    standalone: false
 })
 export class LinktargetPipe implements PipeTransform {
 

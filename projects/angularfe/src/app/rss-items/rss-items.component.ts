@@ -27,9 +27,10 @@ import isset from 'locutus/php/var/isset';
 
 
 @Component({
-  selector: 'app-rss-items',
-  templateUrl: './rss-items.component.html',
-  styleUrls: ['./rss-items.component.css']
+    selector: 'app-rss-items',
+    templateUrl: './rss-items.component.html',
+    styleUrls: ['./rss-items.component.css'],
+    standalone: false
 })
 export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
 

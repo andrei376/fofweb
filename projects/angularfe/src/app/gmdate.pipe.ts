@@ -5,7 +5,8 @@ import gmdate from 'locutus/php/datetime/gmdate';
 
 
 @Pipe({
-  name: 'gmdate'
+    name: 'gmdate',
+    standalone: false
 })
 export class GmdatePipe implements PipeTransform {
 

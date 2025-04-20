@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import nl2br from 'locutus/php/strings/nl2br';
 
 @Pipe({
-  name: 'nl2br'
+    name: 'nl2br',
+    standalone: false
 })
 export class Nl2brPipe implements PipeTransform {
 

@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import htmlspecialchars from 'locutus/php/strings/htmlspecialchars';
 
 @Pipe({
-  name: 'htmlspecialchars'
+    name: 'htmlspecialchars',
+    standalone: false
 })
 export class HtmlspecialcharsPipe implements PipeTransform {
 

@@ -2,9 +2,10 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import $ from 'jquery';
 
 @Component({
-  selector: 'app-notify-text',
-  templateUrl: './notify-text.component.html',
-  styleUrls: ['./notify-text.component.css']
+    selector: 'app-notify-text',
+    templateUrl: './notify-text.component.html',
+    styleUrls: ['./notify-text.component.css'],
+    standalone: false
 })
 export class NotifyTextComponent implements OnInit, OnChanges {
 

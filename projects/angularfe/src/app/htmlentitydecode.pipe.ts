@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import html_entity_decode from 'locutus/php/strings/html_entity_decode';
 
 @Pipe({
-  name: 'htmlentitydecode'
+    name: 'htmlentitydecode',
+    standalone: false
 })
 
 export class HtmlentitydecodePipe implements PipeTransform {
