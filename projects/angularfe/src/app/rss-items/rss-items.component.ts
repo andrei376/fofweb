@@ -1,14 +1,29 @@
 import {Component, VERSION, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter} from '@angular/core';
 import {UserService} from "../_services/user.service";
-import * as $ from 'jquery';
-const is_numeric = require('locutus/php/var/is_numeric');
-const empty = require('locutus/php/var/empty');
-const htmlentities = require('locutus/php/strings/htmlentities');
-const explode = require('locutus/php/strings/explode');
-const implode = require('locutus/php/strings/implode');
-const array_pop = require('locutus/php/array/array_pop');
-const array_merge = require('locutus/php/array/array_merge');
-const isset = require('locutus/php/var/isset');
+import $ from 'jquery';
+//const is_numeric = require('locutus/php/var/is_numeric');
+import is_numeric from 'locutus/php/var/is_numeric';
+
+//const empty = require('locutus/php/var/empty');
+import empty from 'locutus/php/var/empty';
+
+//const htmlentities = require('locutus/php/strings/htmlentities');
+import htmlentities from "locutus/php/strings/htmlentities";
+
+//const explode = require('locutus/php/strings/explode');
+import explode from 'locutus/php/strings/explode';
+
+//const implode = require('locutus/php/strings/implode');
+import implode from 'locutus/php/strings/implode';
+
+//const array_pop = require('locutus/php/array/array_pop');
+import array_pop from 'locutus/php/array/array_pop';
+
+//const array_merge = require('locutus/php/array/array_merge');
+import array_merge from "locutus/php/array/array_merge";
+
+//const isset = require('locutus/php/var/isset');
+import isset from 'locutus/php/var/isset';
 
 
 @Component({

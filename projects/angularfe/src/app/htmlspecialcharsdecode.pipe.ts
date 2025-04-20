@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-const htmlspecialchars_decode = require('locutus/php/strings/htmlspecialchars_decode');
+import htmlspecialchars_decode from 'locutus/php/strings/htmlspecialchars_decode';
 
 @Pipe({
   name: 'htmlspecialcharsdecode'

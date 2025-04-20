@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-notify-text',

@@ -15,12 +15,18 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angularfe",
+            "allowedCommonJsDependencies": [
+              "locutus/php/strings/html_entity_decode"
+            ],
+            "outputPath": {
+              "base": "dist/angularfe"
+            },
             "index": "projects/angularfe/src/index.html",
-            "main": "projects/angularfe/src/main.ts",
-            "polyfills": "projects/angularfe/src/polyfills.ts",
+            "polyfills": [
+              "projects/angularfe/src/polyfills.ts"
+            ],
             "tsConfig": "projects/angularfe/tsconfig.app.json",
             "assets": [
               "projects/angularfe/src/favicon.ico",
@@ -29,7 +35,8 @@
             "styles": [
               "projects/angularfe/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/angularfe/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -54,9 +61,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true

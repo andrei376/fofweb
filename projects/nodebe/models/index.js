@@ -20,7 +20,8 @@ const intval = require("locutus/php/var/intval");
 const Sequelize = require("sequelize");
 const { QueryTypes } = require('sequelize');
 const html_entity_decode = require("locutus/php/strings/html_entity_decode");
-const htmlspecialchars_decode = require("locutus/php/strings/htmlspecialchars_decode");
+//const htmlspecialchars_decode = require("locutus/php/strings/htmlspecialchars_decode");
+//import htmlspecialchars_decode from 'locutus/php/strings/htmlspecialchars_decode'; // Or a similar path
 
 const sequelize = new Sequelize(
   config.DB,

@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module'; // ensures the applicat
 
 import { AppComponent } from './app.component';
 
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'; // enables the application to communicate with the backend services
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'; // enables the application to communicate with the backend services
 import { AuthInterceptorService } from './auth-interceptor.service'; // this will allow the app to automatically attach authorization information to requests
 import { HomeComponent } from './home/home.component'; // implements the home route
 import { LoginComponent } from './login/login.component';
@@ -23,32 +23,26 @@ import {AuthGuardService} from "./_services/auth-guard.service";
 import { NotifyTextComponent } from './notify-text/notify-text.component';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    ProfileComponent,
-    RssItemsComponent,
-    HtmlspecialcharsdecodePipe,
-    HtmlspecialcharsPipe,
-    HtmlentitydecodePipe,
-    GmdatePipe,
-    Nl2brPipe,
-    LinktargetPipe,
-    NotifyTextComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    NgxBootstrapIconsModule.pick(allIcons)
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
-    AuthGuardService
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        LoginComponent,
+        ProfileComponent,
+        RssItemsComponent,
+        HtmlspecialcharsdecodePipe,
+        HtmlspecialcharsPipe,
+        HtmlentitydecodePipe,
+        GmdatePipe,
+        Nl2brPipe,
+        LinktargetPipe,
+        NotifyTextComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        NgxBootstrapIconsModule.pick(allIcons)], providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+        AuthGuardService,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
