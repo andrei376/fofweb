@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges, VERSION} from '@angular/core';
 import { UserService } from '../_services/user.service';
 import * as $ from "jquery";
 
@@ -37,6 +37,8 @@ export class HomeComponent implements OnInit {
   howmany?: any;
 
   intervalId?: any;
+
+  angularVersion = VERSION.full;
 
   // readonly API_URL = 'http://localhost:3080';
   readonly API_URL = '/api';
