@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter} from '@angular/core';
+import {Component, VERSION, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter} from '@angular/core';
 import {UserService} from "../_services/user.service";
 import * as $ from 'jquery';
 const is_numeric = require('locutus/php/var/is_numeric');
@@ -44,6 +44,9 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
   ajaxIsRunning?: boolean;
 
   math?: any;
+
+  angularVersion = VERSION.full;
+
 
   constructor(
     private userService: UserService
