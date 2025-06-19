@@ -12,4 +12,4 @@ docker rmi andrei/nodejs-fofbe
 
 docker build -t andrei/nodejs-fofbe .
 
-docker run -d -p 3080:3080 --network="host" --restart=unless-stopped --name gifted_herschel andrei/nodejs-fofbe
+docker run -d -p 3080:3080 --network="host" --restart=always --name gifted_herschel andrei/nodejs-fofbe
