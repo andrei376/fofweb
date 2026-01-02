@@ -29,6 +29,10 @@ a, a * {
   border-bottom: 1px solid gray;
 }
 
+.table>:not(caption)>*>* {
+  background-color: inherit;
+}
+
 #tags .td-unread, #feeds .unread {
   text-align: right;
 }
