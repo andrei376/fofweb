@@ -99,7 +99,6 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
   }
 
   markRead(id: any): boolean {
-    console.log("in markRead");
     this.ajaxIsRunning = true;
     this.userService.markRead(id).subscribe(
       data => {
