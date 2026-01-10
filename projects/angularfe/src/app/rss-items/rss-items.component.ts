@@ -99,6 +99,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
   }
 
   markRead(id: any): boolean {
+    this.ajaxIsRunning = true;
     this.userService.markRead(id).subscribe(
       data => {
         let item = $('#i' + id);
@@ -110,6 +111,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
 
         this.readEvent.emit(id);
 
+        this.ajaxIsRunning = false;
         this.loadMore();
         return true;
       },
@@ -118,6 +120,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
       }
     );
 
+    this.ajaxIsRunning = false;
     return false;
   }
 
