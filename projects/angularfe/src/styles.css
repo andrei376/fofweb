@@ -63,6 +63,10 @@ a.button.unread {
   border-color: red !important;
 }
 
+.btn:disabled {
+  background-color: brown;
+}
+
 #sidebar ul {
   font-size: .8em;
   padding-left: 0em;
