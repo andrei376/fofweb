@@ -18,7 +18,7 @@
     "express-jwt": ">=7.7.7",
     "express-rate-limit": "^6.7.0",
     "jsonwebtoken": ">=9.0.0",
-    "locutus": "^2.0.16",
+    "locutus": "^3.0.34",
     "mysql": "^2.18.1",
     "mysql2": "^3.14.0",
     "php-unserialize": "0.0.1",

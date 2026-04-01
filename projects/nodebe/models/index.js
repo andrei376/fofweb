@@ -1,25 +1,25 @@
 const config = require("../config/db.config.js");
 const PHPUnserialize = require('php-unserialize');
-const empty = require('locutus/php/var/empty');
-const implode = require('locutus/php/strings/implode');
-const usort = require('locutus/php/array/usort');
-const strtolower = require('locutus/php/strings/strtolower');
-const isset = require('locutus/php/var/isset');
-const htmlentities = require('locutus/php/strings/htmlentities');
-const json_encode = require('locutus/php/json/json_encode');
-const in_array = require('locutus/php/array/in_array');
-const explode = require('locutus/php/strings/explode');
-const is_numeric = require('locutus/php/var/is_numeric');
-const strtoupper = require('locutus/php/strings/strtoupper');
-const is_array = require('locutus/php/var/is_array');
-const substr = require('locutus/php/strings/substr');
-const time = require('locutus/php/datetime/time');
-const intval = require("locutus/php/var/intval");
+const { empty } = require('locutus/php/var/empty');
+const { implode } = require('locutus/php/strings/implode');
+const { usort } = require('locutus/php/array/usort');
+const { strtolower } = require('locutus/php/strings/strtolower');
+const { isset } = require('locutus/php/var/isset');
+const { htmlentities } = require('locutus/php/strings/htmlentities');
+const { json_encode } = require('locutus/php/json/json_encode');
+const { in_array } = require('locutus/php/array/in_array');
+const { explode } = require('locutus/php/strings/explode');
+const { is_numeric } = require('locutus/php/var/is_numeric');
+const { strtoupper } = require('locutus/php/strings/strtoupper');
+const { is_array } = require('locutus/php/var/is_array');
+const { substr } = require('locutus/php/strings/substr');
+const { time } = require('locutus/php/datetime/time');
+const { intval } = require("locutus/php/var/intval");
 
 
 const Sequelize = require("sequelize");
 const { QueryTypes } = require('sequelize');
-const html_entity_decode = require("locutus/php/strings/html_entity_decode");
+const { html_entity_decode } = require("locutus/php/strings/html_entity_decode");
 //const htmlspecialchars_decode = require("locutus/php/strings/htmlspecialchars_decode");
 //import htmlspecialchars_decode from 'locutus/php/strings/htmlspecialchars_decode'; // Or a similar path
 
