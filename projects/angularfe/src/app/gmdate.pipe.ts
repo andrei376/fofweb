@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 //const gmdate = require('locutus/php/datetime/gmdate');
-import gmdate from 'locutus/php/datetime/gmdate';
+import { gmdate } from 'locutus/php/datetime/gmdate';
 
 
 @Pipe({

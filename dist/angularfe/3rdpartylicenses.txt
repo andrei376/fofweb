@@ -25,11 +25,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Package: locutus
-License: "MIT"
-
-
---------------------------------------------------------------------------------
 Package: @angular/core
 License: "MIT"
 
@@ -384,6 +379,11 @@ THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Package: ngx-bootstrap-icons
+License: "MIT"
+
+
+--------------------------------------------------------------------------------
+Package: locutus
 License: "MIT"
 
 

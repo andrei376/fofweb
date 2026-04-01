@@ -2,28 +2,29 @@ import {Component, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, Eve
 import {UserService} from "../_services/user.service";
 import $ from 'jquery';
 //const is_numeric = require('locutus/php/var/is_numeric');
-import is_numeric from 'locutus/php/var/is_numeric';
+import { is_numeric } from 'locutus/php/var/is_numeric'
 
 //const empty = require('locutus/php/var/empty');
-import empty from 'locutus/php/var/empty';
+import { empty } from 'locutus/php/var/empty'
 
 //const htmlentities = require('locutus/php/strings/htmlentities');
-import htmlentities from "locutus/php/strings/htmlentities";
+import { htmlentities } from "locutus/php/strings/htmlentities";
 
 //const explode = require('locutus/php/strings/explode');
-import explode from 'locutus/php/strings/explode';
+import { explode } from 'locutus/php/strings/explode';
 
 //const implode = require('locutus/php/strings/implode');
-import implode from 'locutus/php/strings/implode';
+import { implode } from 'locutus/php/strings/implode';
 
 //const array_pop = require('locutus/php/array/array_pop');
-import array_pop from 'locutus/php/array/array_pop';
+import { array_pop } from 'locutus/php/array/array_pop';
 
 //const array_merge = require('locutus/php/array/array_merge');
-import array_merge from "locutus/php/array/array_merge";
+import { array_merge } from "locutus/php/array/array_merge";
 
 //const isset = require('locutus/php/var/isset');
-import isset from 'locutus/php/var/isset';
+import { isset } from 'locutus/php/var/isset';
+import { PhpRuntimeValue } from 'locutus/php/_helpers/_phpTypes';
 
 
 @Component({
@@ -281,7 +282,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
 
   // $feed=NULL, $what='unread', $when=NULL, $start=NULL, $limit=NULL, $search=NULL, $itemcount = 0
   // $feed: any, $what: any,     $when: any, $which: any, $howmany: any, $search: any, $itemcount: any
-  async fof_view_title($feed: any = null, $what: any = 'unread', $when: any = null, $start: any = null, $limit: any = null, $search: any = null, $itemcount: any = 0) {
+  async fof_view_title($feed: any = null, $what: any = 'unread', $when: any = null, $start: number = 0, $limit: any = null, $search: any = null, $itemcount: any = 0) {
     let $prefs = <any>[];
     let $tags = <any>[];
     let $last_tag;
@@ -337,7 +338,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
 
     if ($what != 'all') {
       $tags = explode(' ', $what);
-      $last_tag = array_pop($tags);
+      $last_tag = <PhpRuntimeValue>array_pop($tags);
       if ( ! empty($last_tag)) {
         $title += ' tagged';
         if ( ! empty($tags)) {
@@ -358,7 +359,7 @@ export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
     return $title;
   }
 
-  fof_get_nav_links($feed: any = null, $what: any ='new', $when: any = null, $start: any = null, $limit: any = null, $search: any = null, $itemcount: any = 9999) {
+  fof_get_nav_links($feed: any = null, $what: any ='new', $when: any = null, $start: number = 0, $limit: any = null, $search: any = null, $itemcount: any = 9999) {
     let $prefs = <any>[];
     let $navlinks = <any>[];
 
