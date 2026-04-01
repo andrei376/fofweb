@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cd /srv/www/fofweb/fofweb/projects/nodebe
+#cd /srv/www/fofweb/fofweb/projects/nodebe
+cd /srv/fofweb/fofweb/projects/nodebe
+
 
 #CONTAINER ID   IMAGE                         COMMAND                  CREATED        STATUS        PORTS                                                                            NAMES
 #707980cd3836   andrei/nodejs-fofbe           "docker-entrypoint.s…"   5 weeks ago    Up 42 hours                                                                                    gifted_herschel
