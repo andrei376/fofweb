@@ -4,78 +4,88 @@
       id="profile-img"
       src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
       class="profile-img-card visually-hidden"
-    />
-    <form
-      *ngIf="!isLoggedIn"
-      name="form"
-      class="p-4"
-      (ngSubmit)="f.form.valid && onSubmit()"
-      #f="ngForm"
-      novalidate
-    >
-      <div class="row mb-3">
-        <label for="username" class="text-end col-sm-3 col-form-label">Username</label>
-        <div class="col-sm-9">
-        <input
-          type="text"
-          class="form-control"
-          name="username"
-          [(ngModel)]="form.username"
-          required
-          autofocus
-          #username="ngModel"
-        />
-        <div
-          class="alert alert-danger"
-          role="alert"
-          *ngIf="username.errors && f.submitted"
+      />
+    @if (!isLoggedIn) {
+      <form
+        name="form"
+        class="p-4"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
         >
-          Username is required!
-        </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="password" class="text-end col-sm-3 col-form-label">Password</label>
-        <div class="col-sm-9">
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="form.password"
-          required
-          minlength="6"
-          #password="ngModel"
-        />
-        <div
-          class="alert alert-danger"
-          role="alert"
-          *ngIf="password.errors && f.submitted"
-        >
-          <div *ngIf="password.errors.required">Password is required</div>
-          <div *ngIf="password.errors.minlength">
-            Password must be at least 6 characters
+        <div class="row mb-3">
+          <label for="username" class="text-end col-sm-3 col-form-label">Username</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control"
+              name="username"
+              [(ngModel)]="form.username"
+              required
+              autofocus
+              #username="ngModel"
+              />
+            @if (username.errors && f.submitted) {
+              <div
+                class="alert alert-danger"
+                role="alert"
+                >
+                Username is required!
+              </div>
+            }
           </div>
         </div>
+        <div class="row mb-3">
+          <label for="password" class="text-end col-sm-3 col-form-label">Password</label>
+          <div class="col-sm-9">
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              [(ngModel)]="form.password"
+              required
+              minlength="6"
+              #password="ngModel"
+              />
+            @if (password.errors && f.submitted) {
+              <div
+                class="alert alert-danger"
+                role="alert"
+                >
+                @if (password.errors.required) {
+                  <div>Password is required</div>
+                }
+                @if (password.errors.minlength) {
+                  <div>
+                    Password must be at least 6 characters
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
-      </div>
-      <div class="mt-5 mb-3 col-sm-12 text-center">
-        <button class="btn btn-primary btn-lg px-5" [disabled]="ajaxIsRunning">
-          Login
-        </button>
-      </div>
-      <div class="form-group">
-        <div
-          class="alert alert-danger"
-          role="alert"
-          *ngIf="f.submitted && isLoginFailed"
-        >
-          Login failed: {{ errorMessage }}
+        <div class="mt-5 mb-3 col-sm-12 text-center">
+          <button class="btn btn-primary btn-lg px-5" [disabled]="ajaxIsRunning">
+            Login
+          </button>
         </div>
-      </div>
-    </form>
+        <div class="form-group">
+          @if (f.submitted && isLoginFailed) {
+            <div
+              class="alert alert-danger"
+              role="alert"
+              >
+              Login failed: {{ errorMessage }}
+            </div>
+          }
+        </div>
+      </form>
+    }
 
-    <div class="alert alert-success" *ngIf="isLoggedIn">
-      Logged in as {{ roles }}.
-    </div>
+    @if (isLoggedIn) {
+      <div class="alert alert-success">
+        Logged in as {{ roles }}.
+      </div>
+    }
   </div>
 </div>
