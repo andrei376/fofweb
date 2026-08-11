@@ -12,7 +12,7 @@
   "dependencies": {
     "@angular/animations": "^21.2.6",
     "@angular/common": "^21.2.6",
-    "@angular/compiler": "^22",
+    "@angular/compiler": "^21",
     "@angular/core": "^21.2.19",
     "@angular/forms": "^21.2.6",
     "@angular/platform-browser": "^21.2.6",
@@ -28,7 +28,7 @@
     "zone.js": "^0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "^22",
+    "@angular/build": "^21",
     "@angular/cli": "^21.2.6",
     "@angular/compiler-cli": "^21.2.6",
     "@types/jasmine": "~4.0.3",
