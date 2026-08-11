@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, SimpleChanges, VERSION} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges, VERSION, ChangeDetectionStrategy} from '@angular/core';
 import { UserService } from '../_services/user.service';
 import * as $ from "jquery";
 
@@ -7,6 +7,7 @@ import * as $ from "jquery";
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

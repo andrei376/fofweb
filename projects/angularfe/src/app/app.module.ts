@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module'; // ensures the applicat
 
 import { AppComponent } from './app.component';
 
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'; // enables the application to communicate with the backend services
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http'; // enables the application to communicate with the backend services
 import { AuthInterceptorService } from './auth-interceptor.service'; // this will allow the app to automatically attach authorization information to requests
 import { HomeComponent } from './home/home.component'; // implements the home route
 import { LoginComponent } from './login/login.component';
@@ -43,6 +43,6 @@ import { NotifyTextComponent } from './notify-text/notify-text.component';
         NgxBootstrapIconsModule.pick(allIcons)], providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
         AuthGuardService,
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withXhr(), withInterceptorsFromDi())
     ] })
 export class AppModule { }

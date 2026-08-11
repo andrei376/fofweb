@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter} from '@angular/core';
+import {Component, DoCheck, Input, Output, OnChanges, OnInit, SimpleChanges, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {UserService} from "../_services/user.service";
 import $ from 'jquery';
 //const is_numeric = require('locutus/php/var/is_numeric');
@@ -31,6 +31,7 @@ import { PhpRuntimeValue } from 'locutus/php/_helpers/_phpTypes';
     selector: 'app-rss-items',
     templateUrl: './rss-items.component.html',
     styleUrls: ['./rss-items.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RssItemsComponent implements OnInit, DoCheck, OnChanges {
